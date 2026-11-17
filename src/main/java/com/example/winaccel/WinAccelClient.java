@@ -1,4 +1,4 @@
-﻿package com.example.winaccel;
+package com.example.winaccel;
 
 import net.fabricmc.api.ClientModInitializer;
 
@@ -7,7 +7,7 @@ public class WinAccelClient implements ClientModInitializer {
     public static double MOUSE_DPI = 1350.0;
     public static double SENSITIVITY_SCALE = 1.0;
 
-    // Windows 11 SmoothMouseXCurve / SmoothMouseYCurve 原生5段斜率增量 (400 DPI 基准)
+    // Windows 11 SmoothMouseXCurve / SmoothMouseYCurve 原生5段折线斜率增量 (400 DPI 基准)
     private static final double S1 = 0.21 / 0.43;
     private static final double DS2 = (1.31 - 0.21) / (1.25 - 0.43) - S1;
     private static final double DS3 = (8.30 - 1.31) / (3.86 - 1.25) - (S1 + DS2);
@@ -15,7 +15,7 @@ public class WinAccelClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        System.out.println("[WinAccel] Windows 11 Mouse Acceleration Restorer Loaded (1350 DPI Mode).");
+        System.out.println("[WinAccel] 26.1 Mouse Speed & Acceleration Restorer Loaded (1350 DPI Mode).");
     }
 
     public static double calculateWin11Multiplier(double dx, double dy, double dtMs) {
@@ -26,7 +26,7 @@ public class WinAccelClient implements ClientModInitializer {
         double dist = Math.max(Math.hypot(dx, dy), 1e-6);
         double dpiScale = Math.max(MOUSE_DPI / 400.0, 0.1);
 
-        // 归一化输入速度 (counts/ms)
+        // 将当前 1350 DPI 下的物理速度归一化至 Windows 曲线基准 (counts/ms)
         double vNorm = (dist / safeDt) / dpiScale;
         double vOut = interpolateWinCurve(vNorm);
 

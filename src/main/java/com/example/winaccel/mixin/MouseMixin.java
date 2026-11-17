@@ -1,4 +1,4 @@
-﻿package com.example.winaccel.mixin;
+package com.example.winaccel.mixin;
 
 import com.example.winaccel.WinAccelClient;
 import net.minecraft.client.Minecraft;

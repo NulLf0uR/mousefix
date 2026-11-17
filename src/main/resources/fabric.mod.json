@@ -1,9 +1,9 @@
-﻿{
+{
   "schemaVersion": 1,
   "id": "winaccel",
   "version": "1.0.0",
   "name": "Win11 Mouse Acceleration Restorer",
-  "description": "Restores Windows 11 Enhance Pointer Precision curve in Minecraft 26.3 (1350 DPI)",
+  "description": "Restores 26.1 (Windows 11 Enhance Pointer Precision) mouse movement speed in Minecraft 26.3",
   "authors": ["nullfour"],
   "license": "MIT",
   "environment": "client",
@@ -16,7 +16,7 @@
     "winaccel.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.16.0",
-    "minecraft": ">=26.1"
+    "fabricloader": ">=0.20.1",
+    "minecraft": "26.3"
   }
 }
