@@ -18,6 +18,13 @@ public class MouseMixin {
     @Unique
     private long winaccel$lastTurnTimeNs = System.nanoTime();
 
+    // 保存每次 Math.round 取整后剩下的小数余量，确保慢速微调不丢步且 100% 保持整数步长
+    @Unique
+    private double winaccel$remDX = 0.0;
+
+    @Unique
+    private double winaccel$remDY = 0.0;
+
     @Inject(method = "turnPlayer", at = @At("HEAD"))
     private void winaccel$applyWindowsAcceleration(double movementTime, CallbackInfo ci) {
         long now = System.nanoTime();
@@ -26,8 +33,19 @@ public class MouseMixin {
 
         if (this.accumulatedDX != 0.0 || this.accumulatedDY != 0.0) {
             double mult = WinAccelClient.calculateWin11Multiplier(this.accumulatedDX, this.accumulatedDY, dtMs);
-            this.accumulatedDX *= mult;
-            this.accumulatedDY *= mult;
+
+            double scaledDX = this.accumulatedDX * mult + this.winaccel$remDX;
+            double scaledDY = this.accumulatedDY * mult + this.winaccel$remDY;
+
+            // 强制取整为整数硬件计数，100% 匹配原版鼠标灵敏度 GCD 步长
+            long intDX = Math.round(scaledDX);
+            long intDY = Math.round(scaledDY);
+
+            this.winaccel$remDX = scaledDX - intDX;
+            this.winaccel$remDY = scaledDY - intDY;
+
+            this.accumulatedDX = (double) intDX;
+            this.accumulatedDY = (double) intDY;
         }
     }
 }
